@@ -1,3 +1,7 @@
+import './style.css';
+
+document.addEventListener("DOMContentLoaded", () => {
+  // rest of your JS code...
 document.addEventListener("DOMContentLoaded", () => {
 
   function updatePulse() {
