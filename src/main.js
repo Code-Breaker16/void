@@ -1,9 +1,7 @@
 import './style.css';
 
 document.addEventListener("DOMContentLoaded", () => {
-  // rest of your JS code...
-document.addEventListener("DOMContentLoaded", () => {
-
+  // --- 1. CLOCK & GREETING ---
   function updatePulse() {
     const clockEl = document.getElementById('clock');
     const greetingEl = document.getElementById('greeting');
@@ -27,7 +25,7 @@ document.addEventListener("DOMContentLoaded", () => {
   setInterval(updatePulse, 1000);
   updatePulse();
 
-
+  // --- 2. POMODORO TIMER ---
   let workTime = 25 * 60;
   let timeLeft = workTime;
   let timerId = null;
@@ -74,7 +72,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-
+  // --- 3. NASA APOD FETCH ---
   const API_KEY = import.meta.env.VITE_NASA_API_KEY;
   const appContainer = document.querySelector("#app");
 
@@ -102,49 +100,42 @@ document.addEventListener("DOMContentLoaded", () => {
         appContainer.innerHTML = `<p class="error">Error: ${err.message}</p>`;
       });
   }
-});
 
-// --- MATRIX RAIN BACKGROUND ---
-const canvas = document.getElementById('matrix');
-if (canvas) {
-  const ctx = canvas.getContext('2d');
+  // --- 4. MATRIX RAIN BACKGROUND ---
+  const canvas = document.getElementById('matrix');
+  if (canvas) {
+    const ctx = canvas.getContext('2d');
 
-  function resizeCanvas() {
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-  }
-  resizeCanvas();
-  window.addEventListener('resize', resizeCanvas);
-
-  // Characters to drop (Katakana, numbers, and symbols)
-  const characters = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ日月火水木金土日月火水木金土';
-  const fontSize = 14;
-  let columns = Math.floor(canvas.width / fontSize);
-  let drops = Array(columns).fill(1);
-
-  window.addEventListener('resize', () => {
-    columns = Math.floor(canvas.width / fontSize);
-    drops = Array(columns).fill(1);
-  });
-
-  function drawMatrix() {
-    // Subtle black fade effect for trailing characters
-    ctx.fillStyle = 'rgba(13, 13, 13, 0.08)';
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-    ctx.fillStyle = '#00FF41'; // Bright matrix green (or use #555555 for subtle monochrome)
-    ctx.font = `${fontSize}px monospace`;
-
-    for (let i = 0; i < drops.length; i++) {
-      const text = characters.charAt(Math.floor(Math.random() * characters.length));
-      ctx.fillText(text, i * fontSize, drops[i] * fontSize);
-
-      if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
-        drops[i] = 0;
-      }
-      drops[i]++;
+    function resizeCanvas() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
     }
-  }
+    resizeCanvas();
+    window.addEventListener('resize', resizeCanvas);
 
-  setInterval(drawMatrix, 33); // ~30 FPS
-}
+    const characters = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ日月火水木金土';
+    const fontSize = 14;
+    let columns = Math.floor(canvas.width / fontSize);
+    let drops = Array(columns).fill(1);
+
+    function drawMatrix() {
+      ctx.fillStyle = 'rgba(13, 13, 13, 0.08)';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      ctx.fillStyle = '#00FF41';
+      ctx.font = `${fontSize}px monospace`;
+
+      for (let i = 0; i < drops.length; i++) {
+        const text = characters.charAt(Math.floor(Math.random() * characters.length));
+        ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+
+        if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+          drops[i] = 0;
+        }
+        drops[i]++;
+      }
+    }
+
+    setInterval(drawMatrix, 33);
+  }
+});
