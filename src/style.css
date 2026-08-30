@@ -1,183 +1,181 @@
 * {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-    font-family: monospace;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: monospace;
 }
+
 
 body {
-    background-color: #0d0d0d;
-    color: #e0e0e0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    position: relative;
-    overflow-x: hidden;
-    padding: 20px 0;
+  background-color: #0d0d0d;
+  color: #e0e0e0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  margin: 0;
+  padding: 20px 0;
+  position: relative;
+  overflow-x: hidden;
 }
 
-body::before {
-    content: "0 1 0 0 1 1 0 1 0 0 1 0 1 1 0 1 1 0 0 1 0 1 0 1 0 1 0 1 1 1 0 1 0 1 1 0 1 0 1 1 0 0 1";
-    position: absolute;
-    top: -100px;
-    left: 0;
-    width: 100%;
-    height: 200%;
-    color: rgba(60, 70, 60, 0.25);
-    font-size: 1.2rem;
-    line-height: 1.5;
-    word-wrap: break-word;
-    opacity: 0.15;
-    z-index: -1;
-    animation: fall 15s  linear infinite;
+
+body::before,
+body::after {
+  content: none !important;
 }
 
-@keyframes fall {
-    0% { transform: translateY(0);}
-    100% {transform: translateY(20%);}
+
+#matrix {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 0;
+  pointer-events: none;
 }
+
 
 .container {
-    width: 100%;
-    max-width: 480px;
-    padding: 24px;
-    background: rgba(20, 20, 20, 0.95);
-    border: 1px solid #1a1a1a;
-    border-radius: 4px;
-    backdrop-filter: blur(4px);
-    position: relative;
-    z-index: 1;
+  width: 100%;
+  max-width: 480px;
+  padding: 24px;
+  background: rgba(20, 20, 20, 0.92);
+  border: 1px solid #1a1a1a;
+  border-radius: 6px;
+  backdrop-filter: blur(6px);
+  position: relative;
+  z-index: 1;
 }
+
 
 #clock {
-    font-family: 'Orbitron', monospace;
-    font-size: 2.8rem;
-    font-weight: 900;
-    color: #ffffff;
-    letter-spacing: -1px;
+  font-family: 'Orbitron', monospace;
+  font-size: 2.8rem;
+  font-weight: 900;
+  color: #ffffff;
+  letter-spacing: -1px;
 }
 
-#greetings {
-    font-family: 'Black Ops One', monospace;
-    font-size: 0.85rem;
-    color: #777777;
-    margin-bottom: 20px;
+#greeting {
+  font-family: 'Black Ops One', monospace;
+  font-size: 16px;
+  color: #777777;
+  margin-top: 5px;
+  margin-bottom: 3px;
 }
+
 
 .search-form input {
-    width: 100%;
-    padding: 10px;
-    font-size: 0.9rem;
-    background: #1a1a1a;
-    color: #e0e0e0;
-    border: 1px solid #2a2a2a;
-    border-radius: 4px;
-    outline: none;
+  width: 100%;
+  padding: 10px;
+  font-size: 0.9rem;
+  background: #1a1a1a;
+  color: #e0e0e0;
+  border: 1px solid #2a2a2a;
+  border-radius: 4px;
+  outline: none;
 }
 
 .search-form input:focus {
-    border-color: #555555;
+  border-color: #555555;
 }
 
+
 .pomo {
-    margin: 20px 0;
-    padding: 14px;
-    background: rgba(26, 26, 26, 0.8);
-    border: 1px solid #333333;
-    border-radius: 4px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+  margin: 20px 0;
+  padding: 14px;
+  background: rgba(26, 26, 26, 0.8);
+  border: 1px solid #333333;
+  border-radius: 4px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 #pomo-display {
-    font-family: 'Orbitron', monospace;
-    font-size: 1.3rem;
-    color: #d4d4d4;
+  font-family: 'Orbitron', monospace;
+  font-size: 1.3rem;
+  color: #d4d4d4;
 }
 
 .pomo-controls button {
-    background: transparent;
-    color: #888888;
-    border: 1px solid #3a3a3a;
-    padding: 6px 12px;
-    font-size: 0.8rem;
-    cursor: pointer;
-    border-radius: 3px;
-    margin-left: 6px;
+  background: transparent;
+  color: #888888;
+  border: 1px solid #3a3a3a;
+  padding: 6px 12px;
+  font-size: 0.8rem;
+  cursor: pointer;
+  border-radius: 3px;
+  margin-left: 6px;
 }
 
 .pomo-controls button:hover {
-    color: #ffffff;
-    border-color: #555555;
+  color: #ffffff;
+  border-color: #555555;
 }
 
 .apod-box {
-    margin: 20px 0;
-    padding: 16px;
-    background: #141414;
-    border: 1px solid #262626;
-    border-radius: 4px;
+  margin: 20px 0;
+  padding: 16px;
+  background: #141414;
+  border: 1px solid #262626;
+  border-radius: 4px;
 }
 
 .apod-title {
-    font-family: 'Orbitron', sans-serif;
-    font-size: 1rem;
-    color: #ffffff;
-    margin-bottom: 12px;
+  font-family: 'Orbitron', sans-serif;
+  font-size: 1rem;
+  color: #ffffff;
+  margin-bottom: 12px;
 }
 
 .apod-img, .apod-video {
-    width: 100%;
-    max-height: 240px;
-    object-fit: cover;
-    border-radius: 3px;
-    border: 1px solid #333333;
-    margin-bottom: 12px;
+  width: 100%;
+  max-height: 240px;
+  object-fit: cover;
+  border-radius: 3px;
+  border: 1px solid #333333;
+  margin-bottom: 12px;
 }
 
-.apod-video{
-    height: 200px;
+.apod-video {
+  height: 200px;
 }
 
 .apod-desc {
-    font-size: 0.75rem;
-    line-height: 1.4;
-    color: #888888;
-    max-height: 100px;
-    overflow-y: auto;
+  font-size: 0.75rem;
+  line-height: 1.4;
+  color: #888888;
+  max-height: 100px;
+  overflow-y: auto;
 }
 
 .loading, .error {
-    font-size: 0.85rem;
-    color: #777777;
+  font-size: 0.85rem;
+  color: #777777;
 }
 
+/* Shortcuts Grid */
 .shortcuts {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 8px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
 }
 
 .card {
-    padding: 10px;
-    background: rgba(26, 26, 26, 0.8);
-    color: #a0a0a0;
-    text-decoration: none;
-    border: 1px solid #333333;
-    border-radius: 4px;
-    font-size: 0.8rem;
-    text-align: center;
+  padding: 10px;
+  background: rgba(26, 26, 26, 0.8);
+  color: #a0a0a0;
+  text-decoration: none;
+  border: 1px solid #333333;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  text-align: center;
 }
 
 .card:hover {
-    color: #ffffff;
-    border-color: #555555;
-}
-
-@media (max-width: 600px) {
-    body::before {
-        display: none;
-    }
+  color: #ffffff;
+  border-color: #555555;
 }
