@@ -83,7 +83,7 @@ document.addEventListener("DOMContentLoaded", () => {
       .then(data => {
         let media = '';
 
-        if (data.media_type === "image") {
+        if (data.media_type === "image" && data.url) {
           media = `<img src="${data.url}" alt="${data.title || 'APOD Image'}" class="apod-img" />`;
         } else if (data.media_type === "video" && data.url && (data.url.includes("youtube.com") || data.url.includes("youtu.be"))) {
           let embedUrl = data.url;
@@ -95,9 +95,13 @@ document.addEventListener("DOMContentLoaded", () => {
           media = `<iframe src="${embedUrl}" class="apod-video" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
         } else {
           
-          const navUrl = (data.url && data.url !== "undefined") ? data.url : "https://apod.nasa.gov/apod/";
+          let targetUrl = "https://apod.nasa.gov/apod/";
+          if (data.url && typeof data.url === "string" && data.url !== "undefined") {
+            targetUrl = data.url.startsWith("http") ? data.url : `https://apod.nasa.gov/apod/${data.url}`;
+          }
+
           media = `<div style="margin: 12px 0; padding: 12px; background: #222; border-radius: 4px; text-align: center;">
-            <a href="${navUrl}" target="_blank" style="color: #61afef; text-decoration: underline; font-size: 0.8rem;">
+            <a href="${targetUrl}" target="_blank" rel="noopener noreferrer" style="color: #61afef; text-decoration: underline; font-size: 0.8rem;">
               View featured APOD content on NASA site ↗
             </a>
           </div>`;
