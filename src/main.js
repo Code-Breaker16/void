@@ -112,3 +112,4 @@ document.addEventListener("DOMContentLoaded", () => {
         appContainer.innerHTML = `<p class="error">Failed to load APOD feed: ${err.message}</p>`;
       });
   }
+});
