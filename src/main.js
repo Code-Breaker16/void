@@ -1,7 +1,7 @@
 import './style.css';
 
 document.addEventListener("DOMContentLoaded", () => {
-
+  
   function updatePulse() {
     const clockEl = document.getElementById('clock');
     const greetingEl = document.getElementById('greeting');
@@ -14,7 +14,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const s = String(now.getSeconds()).padStart(2, '0');
     clockEl.textContent = `${h}:${m}:${s}`;
 
-
     const hour = now.getHours();
     let text = "good evening";
     if (hour < 12) text = "good morning";
@@ -26,7 +25,7 @@ document.addEventListener("DOMContentLoaded", () => {
   setInterval(updatePulse, 1000);
   updatePulse();
 
-
+  
   let workTime = 25 * 60;
   let timeLeft = workTime;
   let timerId = null;
@@ -73,6 +72,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
+  
   const API_KEY = import.meta.env.VITE_NASA_API_KEY;
   const appContainer = document.querySelector("#app");
 
@@ -82,12 +82,21 @@ document.addEventListener("DOMContentLoaded", () => {
     fetch(`https://api.nasa.gov/planetary/apod?api_key=${API_KEY || 'DEMO_KEY'}`)
       .then(response => response.json())
       .then(data => {
-        let media;
+        let media = '';
 
         if (data.media_type === "image") {
           media = `<img src="${data.url}" alt="${data.title || 'APOD Image'}" class="apod-img" />`;
-        } else {
-          media = `<iframe src="${data.url}" class="apod-video" frameborder="0" allowfullscreen></iframe>`;
+        } else if (data.media_type === "video") {
+          let embedUrl = data.url;
+
+          
+          if (embedUrl.includes("youtube.com/watch?v=")) {
+            embedUrl = embedUrl.replace("watch?v=", "embed/");
+          } else if (embedUrl.includes("youtu.be/")) {
+            embedUrl = embedUrl.replace("youtu.be/", "www.youtube.com/embed/");
+          }
+
+          media = `<iframe src="${embedUrl}" class="apod-video" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
         }
 
         appContainer.innerHTML = `
