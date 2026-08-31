@@ -72,30 +72,42 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  const API_KEY = import.meta.env.VITE_NASA_API_KEY;
+  const API_KEY = import.meta.env.VITE_NASA_API_KEY || 'DEMO_KEY';
   const appContainer = document.querySelector("#app");
 
-  if (appContainer) {
-    appContainer.innerHTML = "<p class='loading'>fetching NASA APOD...</p>";
+  function loadAPOD(dateOffset = 0) {
+    if (!appContainer) return;
 
-    fetch(`https://api.nasa.gov/planetary/apod?api_key=${API_KEY || 'DEMO_KEY'}`)
+    let targetDateUrl = `https://api.nasa.gov/planetary/apod?api_key=${API_KEY}`;
+    
+    if (dateOffset > 0) {
+      const targetDate = new Date();
+      targetDate.setDate(targetDate.getDate() - dateOffset);
+      const dateStr = targetDate.toISOString().split('T')[0];
+      targetDateUrl = `https://api.nasa.gov/planetary/apod?api_key=${API_KEY}&date=${dateStr}`;
+    }
+
+    fetch(targetDateUrl)
       .then(response => response.json())
       .then(data => {
         let media = '';
 
         if (data.media_type === "image" && data.url) {
           media = `<img src="${data.url}" alt="${data.title || 'APOD Image'}" class="apod-img" />`;
-        } else if (data.media_type === "video" && data.url) {
+        } else if (data.media_type === "video" && data.url && (data.url.includes("youtube.com") || data.url.includes("youtu.be"))) {
           let embedUrl = data.url;
-
-          // Transform YouTube watch link to iframe-compatible embed format
-          if (embedUrl.includes("youtube.com/watch?v=")) {
+          if (embedUrl.includes("watch?v=")) {
             embedUrl = embedUrl.replace("watch?v=", "embed/");
           } else if (embedUrl.includes("youtu.be/")) {
             embedUrl = embedUrl.replace("youtu.be/", "www.youtube.com/embed/");
           }
-
           media = `<iframe src="${embedUrl}" class="apod-video" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
+        } else {
+          // If non-embeddable (like raw HTML APOD page), fetch the previous day's photo/video
+          if (dateOffset < 5) {
+            loadAPOD(dateOffset + 1);
+            return;
+          }
         }
 
         appContainer.innerHTML = `
@@ -107,5 +119,10 @@ document.addEventListener("DOMContentLoaded", () => {
       .catch(err => {
         appContainer.innerHTML = `<p class="error">Failed to load APOD feed: ${err.message}</p>`;
       });
+  }
+
+  if (appContainer) {
+    appContainer.innerHTML = "<p class='loading'>fetching NASA APOD...</p>";
+    loadAPOD(0);
   }
 });
