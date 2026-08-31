@@ -75,38 +75,32 @@ document.addEventListener("DOMContentLoaded", () => {
   const API_KEY = import.meta.env.VITE_NASA_API_KEY || 'DEMO_KEY';
   const appContainer = document.querySelector("#app");
 
-  function loadAPOD(dateOffset = 0) {
-    if (!appContainer) return;
+  if (appContainer) {
+    appContainer.innerHTML = "<p class='loading'>fetching NASA APOD...</p>";
 
-    let targetDateUrl = `https://api.nasa.gov/planetary/apod?api_key=${API_KEY}`;
-    
-    if (dateOffset > 0) {
-      const targetDate = new Date();
-      targetDate.setDate(targetDate.getDate() - dateOffset);
-      const dateStr = targetDate.toISOString().split('T')[0];
-      targetDateUrl = `https://api.nasa.gov/planetary/apod?api_key=${API_KEY}&date=${dateStr}`;
-    }
-
-    fetch(targetDateUrl)
+    fetch(`https://api.nasa.gov/planetary/apod?api_key=${API_KEY}`)
       .then(response => response.json())
       .then(data => {
         let media = '';
 
         if (data.media_type === "image" && data.url) {
           media = `<img src="${data.url}" alt="${data.title || 'APOD Image'}" class="apod-img" />`;
-        } else if (data.media_type === "video" && data.url && (data.url.includes("youtube.com") || data.url.includes("youtu.be"))) {
-          let embedUrl = data.url;
-          if (embedUrl.includes("watch?v=")) {
-            embedUrl = embedUrl.replace("watch?v=", "embed/");
-          } else if (embedUrl.includes("youtu.be/")) {
-            embedUrl = embedUrl.replace("youtu.be/", "www.youtube.com/embed/");
-          }
-          media = `<iframe src="${embedUrl}" class="apod-video" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
-        } else {
-          // If non-embeddable (like raw HTML APOD page), fetch the previous day's photo/video
-          if (dateOffset < 5) {
-            loadAPOD(dateOffset + 1);
-            return;
+        } else if (data.media_type === "video" && data.url) {
+          if (data.url.includes("youtube.com") || data.url.includes("youtu.be")) {
+            // YouTube Video
+            let embedUrl = data.url;
+            if (embedUrl.includes("watch?v=")) {
+              embedUrl = embedUrl.replace("watch?v=", "embed/");
+            } else if (embedUrl.includes("youtu.be/")) {
+              embedUrl = embedUrl.replace("youtu.be/", "www.youtube.com/embed/");
+            }
+            media = `<iframe src="${embedUrl}" class="apod-video" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
+          } else {
+            // Native HTML5 MP4/WebM Video (Direct NASA Video File)
+            media = `<video controls class="apod-video" style="width: 100%; border-radius: 6px;">
+              <source src="${data.url}" type="video/mp4">
+              Your browser does not support the video tag.
+            </video>`;
           }
         }
 
@@ -119,10 +113,5 @@ document.addEventListener("DOMContentLoaded", () => {
       .catch(err => {
         appContainer.innerHTML = `<p class="error">Failed to load APOD feed: ${err.message}</p>`;
       });
-  }
-
-  if (appContainer) {
-    appContainer.innerHTML = "<p class='loading'>fetching NASA APOD...</p>";
-    loadAPOD(0);
   }
 });
