@@ -85,10 +85,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
         if (data.media_type === "image" && data.url) {
           media = `<img src="${data.url}" alt="${data.title || 'APOD Image'}" class="apod-img" />`;
-        } else {
-          // Strictly force an embedded iframe element for videos/web feeds
-          let embedUrl = data.url || "https://apod.nasa.gov/apod/";
+        } else if (data.media_type === "video" && data.url) {
+          let embedUrl = data.url;
 
+          // Transform YouTube watch link to iframe-compatible embed format
           if (embedUrl.includes("youtube.com/watch?v=")) {
             embedUrl = embedUrl.replace("watch?v=", "embed/");
           } else if (embedUrl.includes("youtu.be/")) {
